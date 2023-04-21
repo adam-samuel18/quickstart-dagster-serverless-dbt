@@ -1,0 +1,12 @@
+version: 2
+
+sources:
+  - name: forex
+    tables:
+      - name: fx_rates
+         filter: |
+            {% if target.name == 'dev' %}
+               where event_time > current_timestamp - interval '3 days'
+            {% elif target.name == 'ci' %}
+               where 1 = 0
+            {% endif %}

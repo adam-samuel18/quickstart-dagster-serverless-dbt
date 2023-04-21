@@ -1,0 +1,24 @@
+name: 'dbt_dagster_serverless'
+version: '1.0.0'
+
+config-version: 2
+
+profile: 'dbt_dagster_serverless'
+
+source-paths: ["models"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+target-path: "target"
+
+models:
+  transient: False
+  dbt_dagster_serverless:
+    STAGING:
+      schema: STAGING
+      materialized: ephemeral
+    INTERMEDIATE:
+      schema: INTERMEDIATE
+      materialized: view
+    MARTS:
+      schema: MARTS
+      materialized: table
