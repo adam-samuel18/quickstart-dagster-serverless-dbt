@@ -20,7 +20,7 @@ class BigQueryLoadAuth:
         self.table = config["TABLE"]
         self.warehouse = config["WAREHOUSE"]
 
-    def establish_connection(self):
+    def establish_connection(self) -> tuple[str, dict]:
 
         # Construct a BigQuery client object.
         self.client = bigquery.Client()

@@ -7,11 +7,11 @@ from datetime import datetime
 
 
 class AWSSecretAuth:
-    def __init__(self, config):
+    def __init__(self, config: dict):
         self.region_name = config["REGION_NAME"]
         self.secret_name = config["SECRET_NAME"]
 
-    def get_secret(self):
+    def get_secret(self) -> dict:
         # Create a Secrets Manager client
         session = boto3.session.Session()
         client = session.client(
@@ -58,7 +58,7 @@ class AWSSecretAuth:
 
 
 class S3Export:
-    def write_to_s3(aws_key, aws_secret, env, config, data):
+    def write_to_s3(aws_key: str, aws_secret: str, env: str, config: dict, data):
         """
         Writes data to AWS S3 bucket
         """

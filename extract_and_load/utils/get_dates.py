@@ -3,6 +3,7 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
+from typing import Iterator
 from datetime import datetime, timedelta
 #from extract_and_load.utils.snowflake_queries import SnowflakeGetDates
 from extract_and_load.utils.bigquery_queries import BigQueryGetDates
@@ -23,12 +24,12 @@ class GetDates:
         self.env = env
         self.config = config
 
-    def chunks(lst, n):
+    def chunks(lst, n) -> Iterator[int]:
         """Yield successive n-sized chunks from lst."""
         for i in range(0, len(lst), n):
             yield lst[i:i + n]
 
-    def get_dates(self, max_date_in_table = None):
+    def get_dates(self, max_date_in_table = None) -> tuple[datetime, datetime]:
         """
         Calculates the which dates to query when getting new raw data based on environment and max_date in the table
         """
@@ -63,7 +64,7 @@ class GetDates:
 
         return from_date, to_date
 
-    def daterange(self):
+    def daterange(self) -> datetime:
         """
         Yields dates from the user defined daterange. The get_rates() function will work over these date values.
         :param start_date, end_date: are defined in the json config file

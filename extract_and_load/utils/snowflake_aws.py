@@ -5,7 +5,7 @@ from snowflake.connector.pandas_tools import write_pandas
 
 class SnowflakeLoadAuth:
 
-    def __init__(self, config, env):
+    def __init__(self, config: dict, env: str):
         if env == 'dev':
             secret_name = 'SF_LOAD_DEV'
         elif env == 'prod':
@@ -20,7 +20,7 @@ class SnowflakeLoadAuth:
         self.table = config["TABLE"]
         self.warehouse = config["WAREHOUSE"]
 
-    def establish_connection(self):
+    def establish_connection(self) -> tuple(dict, str):
 
         secret = self.aws_secret_auth.get_secret()
         user = secret["user"]
@@ -41,7 +41,7 @@ class SnowflakeLoadAuth:
         return conn, database
 
 class SnowflakeExport:
-    def __init__(self, config, env):
+    def __init__(self, config: dict, env: str)
 
         snowflake_load_auth = SnowflakeLoadAuth(config, env)
         self.conn, self.database = snowflake_load_auth.establish_connection()

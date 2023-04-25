@@ -8,7 +8,7 @@ from snowflake_aws import SnowflakeLoadAuth
 
 class SnowflakeGetDates:
     def __init__(
-        self, config, env
+        self, config: dict, env: str
     ):
         self.datetime_column = config["DATETIME_COLUMN"]
         self.schema = config["SCHEMA"]
@@ -17,7 +17,7 @@ class SnowflakeGetDates:
         snowflake_load_auth = SnowflakeLoadAuth(config, env)
         self.conn, self.database = snowflake_load_auth.establish_connection(self.schema)
 
-    def get_max_date_from_table(self):
+    def get_max_date_from_table(self) -> datetime:
         """
         Gets the maximum date in the table in the database
         """

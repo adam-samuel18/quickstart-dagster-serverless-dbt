@@ -16,7 +16,7 @@ class BigQueryGetDates:
         bigquery_load_auth = BigQueryLoadAuth(config, env)
         self.database, self.client = bigquery_load_auth.establish_connection()
 
-    def get_max_date_from_table(self):
+    def get_max_date_from_table(self) -> datetime:
         """
         Gets the maximum date in the table in the database
         """
