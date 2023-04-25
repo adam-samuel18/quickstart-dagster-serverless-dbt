@@ -1,1 +1,4 @@
 **/__pycache__/**
+dbt/logs*
+dbt/dbt_packages*
+dbt/target*

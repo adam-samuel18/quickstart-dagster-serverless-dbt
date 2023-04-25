@@ -1,0 +1,22 @@
+version: 2
+
+models:
+ - name: f_fx_rates
+
+metrics:
+  - name: avg_usd_fx_rate
+    label: Average FX Rate
+    model: ref('f_fx_rates')
+    description: "Average USD FX rate over a given time period"
+
+    calculation_method: average
+    expression: USD
+
+    timestamp: date
+    time_grains: [day, week, month, quarter, year]
+
+    config:
+      enabled: true
+      treat_null_values_as_zero: false
+
+    meta: {team: Finance}

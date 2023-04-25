@@ -2,4 +2,4 @@
     tags=['daily','early_morning']
 ) }}
 
-select * from {{ ref('int_fx_rates') }}
+select * from {{ ref('stg_forex__fx_rates') }}

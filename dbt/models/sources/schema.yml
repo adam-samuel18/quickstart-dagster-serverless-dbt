@@ -2,11 +2,13 @@ version: 2
 
 sources:
   - name: forex
+    database: raw-prod
+    schema: forex
     tables:
       - name: fx_rates
-         filter: |
-            {% if target.name == 'dev' %}
-               where event_time > current_timestamp - interval '3 days'
-            {% elif target.name == 'ci' %}
-               where 1 = 0
-            {% endif %}
+#         filter: |
+#            {% if target.name == 'dev' %}
+#               where event_time > current_timestamp - interval '3 days'
+#            {% elif target.name == 'ci' %}
+#               where 1 = 0
+#            {% endif %}
