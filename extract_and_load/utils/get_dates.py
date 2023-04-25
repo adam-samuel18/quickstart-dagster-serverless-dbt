@@ -5,6 +5,7 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
 from datetime import datetime, timedelta
 #from extract_and_load.utils.snowflake_queries import SnowflakeGetDates
+from extract_and_load.utils.bigquery_queries import BigQueryGetDates
 
 class GetDates:
     def __init__(
@@ -12,7 +13,7 @@ class GetDates:
     ):
 
         self.datetime_column = config["DATETIME_COLUMN"]
-        self.number_of_days_to_ingest = config["NUMBER_OF_DAYS_TO_INGEST"]
+        self.number_of_days_to_ingest = config["NUMBER_OF_DAYS_TO_INGEST"] - 1
         self.first_import_from_date = config["FIRST_IMPORT_FROM_DATE"]
         self.schema = config["SCHEMA"]
         self.table = config["TABLE"]
@@ -20,6 +21,7 @@ class GetDates:
         self.from_date_override = config["FROM_DATE_OVERRIDE"]
         self.to_date_override = config["TO_DATE_OVERRIDE"]
         self.env = env
+        self.config = config
 
     def chunks(lst, n):
         """Yield successive n-sized chunks from lst."""
@@ -33,6 +35,8 @@ class GetDates:
 
         #snowflake_dates = SnowflakeGetDates(self.config, self.env)
         #max_date_in_table = snowflake_dates.get_max_date_from_table()
+        bigquery_dates = BigQueryGetDates(self.config, self.env)
+        max_date_in_table = bigquery_dates.get_max_date_from_table()
 
         if self.from_date_override == None:
             if self.env == 'dev':
