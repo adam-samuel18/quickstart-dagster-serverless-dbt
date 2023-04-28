@@ -24,7 +24,7 @@ from extract_and_load.utils.get_dates import GetDates
 #from extract_and_load.utils.duckdb import DuckDBExport
 from extract_and_load.utils.bigquery import BigQueryExport
 
-def get_report(daterange, base_currency):
+def get_report(daterange, base_currency) -> pd.DataFrame:
     """
     Return foreign exchange rates for more than 25 currencies. Start and end date can be configured in the json config file.
     The entries come back per day, but there might be gaps. The date + exchange rates create a row, which are added to a list, this is the end result.
@@ -70,16 +70,19 @@ if __name__ == "__main__":
 
     get_dates = GetDates(config, env)
     daterange = get_dates.daterange()
-    report = get_report(daterange, config['BASE_CURRENCY'])
-    if report != None:
-        #snowflake_export = SnowflakeExport(config, env)
-        #snowflake_export.copy_df_into_sf_table(report)
+    get_report(daterange, config['BASE_CURRENCY'])
+    
+    #report = get_report(daterange, config['BASE_CURRENCY'])
 
-        #duckdb_export = DuckDBExport()
-        #duckdb_export.view_df_into_ddb(report)
+    #if report != None:
+    #    #snowflake_export = SnowflakeExport(config, env)
+    #    #snowflake_export.copy_df_into_sf_table(report)
 
-        bigquery_export = BigQueryExport(config, env, job_config=None)
-        bigquery_export.copy_df_into_bq_table(report)
-    else:
-        print('No results were found')
+    #    #duckdb_export = DuckDBExport()
+    #    #duckdb_export.view_df_into_ddb(report)
+
+    #    bigquery_export = BigQueryExport(config, env, job_config=None)
+    #    bigquery_export.copy_df_into_bq_table(report)
+    #else:
+    #    print('No results were found')
    
