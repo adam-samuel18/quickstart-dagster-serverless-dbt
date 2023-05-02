@@ -8,4 +8,4 @@ RUN apt install -y default-jre
 
 ADD . .
 
-RUN pip install -e .
+RUN pip install -r requirements.txt .
