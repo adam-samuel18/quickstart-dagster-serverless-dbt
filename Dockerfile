@@ -5,6 +5,6 @@ RUN apt-get install git -y
 ENV DAGSTER_HOME = /opt/dagster/app/
 RUN mkdir -p $DAGSTER_HOME
 WORKDIR $DAGSTER_HOME
-COPY dagster.yaml workspace.yaml requirements.txt .
+COPY dagster.yaml workspace.yaml requirements.txt $DAGSTER_HOME
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
