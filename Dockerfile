@@ -1,11 +1,9 @@
 FROM python:3.8-slim
 
-WORKDIR /opt/dagster/app
-
-RUN apt-get update && apt-get install -y git 
-
-RUN apt install -y default-jre
-
-ADD . .
-
-RUN pip install -r requirements.txt .
+RUN apt-get update && apt-get upgrade -yqq
+RUN apt-get install git -y
+ENV DAGSTER_HOME = /opt/dagster/app
+RUN mkdir -p $DAGSTER_HOME
+WORKDIR $DAGSTER_HOME
+COPY dagster.yaml workspace.yaml requirements.txt $DAGSTER_HOME
+RUN pip install -r requirements.txt
