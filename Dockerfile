@@ -5,7 +5,9 @@ RUN mkdir -p $DAGSTER_HOME
 WORKDIR $DAGSTER_HOME
 RUN pip install --upgrade pip
 
-COPY dagster.yaml dagster_cloud.yaml workspace.yaml requirements.txt $DAGSTER_HOME
-RUN $DAGSTER_HOME/venv/bin/activate 
-RUN pip install -r requirements.txt
+RUN python3 -m venv $DAGSTER_HOME/venv
+
+COPY requirements.txt .
+COPY dagster.yaml dagster_cloud.yaml workspace.yaml $DAGSTER_HOME
+RUN . /opt/venv/bin/activate && pip install -r requirements.txt
 RUN rm -rf requirements.txt /root/.cache
