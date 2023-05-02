@@ -27,7 +27,9 @@ class BigQueryGetDates:
             max_date_in_table = max_date_in_table_query.result()
             for date in max_date_in_table:
                 max_date_in_table = date.values()[0]
-                max_date_in_table = datetime.combine(max_date_in_table, datetime.min.time())
+                max_date_in_table = datetime.combine(
+                    max_date_in_table, datetime.min.time()
+                )
 
         except Exception as e:
             print(e)

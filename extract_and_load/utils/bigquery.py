@@ -7,12 +7,11 @@ from google.cloud import bigquery
 
 
 class BigQueryLoadAuth:
-
     def __init__(self, config, env):
-        if env == 'dev':
-            self.project_name = 'raw-dev'
-        elif env == 'prod':
-            self.project_name = 'raw-prod'
+        if env == "dev":
+            self.project_name = "raw-dev"
+        elif env == "prod":
+            self.project_name = "raw-prod"
         else:
             print("You must specify an environment in [dev, prod]")
 
@@ -21,7 +20,6 @@ class BigQueryLoadAuth:
         self.warehouse = config["WAREHOUSE"]
 
     def establish_connection(self) -> tuple[str, dict]:
-
         # Construct a BigQuery client object.
         self.client = bigquery.Client()
 
@@ -30,7 +28,6 @@ class BigQueryLoadAuth:
 
 class BigQueryExport:
     def __init__(self, config, env, job_config):
-
         bigquery_load_auth = BigQueryLoadAuth(config, env)
         self.project_name, self.client = bigquery_load_auth.establish_connection()
         self.table_id = f"{self.project_name}.{config['SCHEMA']}.{config['TABLE']}"
@@ -42,8 +39,7 @@ class BigQueryExport:
         """
 
         job = self.client.load_table_from_dataframe(
-            df, self.table_id, 
-            job_config = self.job_config
+            df, self.table_id, job_config=self.job_config
         )
 
         job.result()
@@ -61,8 +57,7 @@ class BigQueryExport:
         """
 
         job = self.client.load_table_from_json(
-            json, self.table_id, 
-            job_config = self.job_config
+            json, self.table_id, job_config=self.job_config
         )
 
         job.result()

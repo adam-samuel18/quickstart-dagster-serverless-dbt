@@ -5,14 +5,13 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
 from typing import Iterator
 from datetime import datetime, timedelta
-#from extract_and_load.utils.snowflake_queries import SnowflakeGetDates
+
+# from extract_and_load.utils.snowflake_queries import SnowflakeGetDates
 from extract_and_load.utils.bigquery_queries import BigQueryGetDates
 
-class GetDates:
-    def __init__(
-        self, config, env
-    ):
 
+class GetDates:
+    def __init__(self, config, env):
         self.datetime_column = config["DATETIME_COLUMN"]
         self.number_of_days_to_ingest = config["NUMBER_OF_DAYS_TO_INGEST"] - 1
         self.first_import_from_date = config["FIRST_IMPORT_FROM_DATE"]
@@ -27,31 +26,33 @@ class GetDates:
     def chunks(lst, n) -> Iterator[int]:
         """Yield successive n-sized chunks from lst."""
         for i in range(0, len(lst), n):
-            yield lst[i:i + n]
+            yield lst[i : i + n]
 
-    def get_dates(self, max_date_in_table = None) -> tuple[datetime, datetime]:
+    def get_dates(self, max_date_in_table=None) -> tuple[datetime, datetime]:
         """
         Calculates the which dates to query when getting new raw data based on environment and max_date in the table
         """
 
-        #snowflake_dates = SnowflakeGetDates(self.config, self.env)
-        #max_date_in_table = snowflake_dates.get_max_date_from_table()
+        # snowflake_dates = SnowflakeGetDates(self.config, self.env)
+        # max_date_in_table = snowflake_dates.get_max_date_from_table()
         bigquery_dates = BigQueryGetDates(self.config, self.env)
         max_date_in_table = bigquery_dates.get_max_date_from_table()
 
         if self.from_date_override == None:
-            if self.env == 'dev':
-                from_date = datetime.utcnow()-timedelta(days=7)
-            elif self.env == 'prod':
+            if self.env == "dev":
+                from_date = datetime.utcnow() - timedelta(days=7)
+            elif self.env == "prod":
                 if max_date_in_table == None:
-                    print(f'Doing initial import')
-                    from_date = datetime.strptime(self.first_import_from_date,'%Y-%m-%d')
+                    print(f"Doing initial import")
+                    from_date = datetime.strptime(
+                        self.first_import_from_date, "%Y-%m-%d"
+                    )
                 else:
                     from_date = max_date_in_table - timedelta(
                         days=self.number_of_days_to_ingest
                     )
             else:
-                print('env needs to be in [dev,prod]')
+                print("env needs to be in [dev,prod]")
         else:
             from_date = self.from_date_override
 
@@ -60,7 +61,7 @@ class GetDates:
         else:
             to_date = self.to_date_override
 
-        print(f'Fetching data from {from_date} to {to_date}')
+        print(f"Fetching data from {from_date} to {to_date}")
 
         return from_date, to_date
 

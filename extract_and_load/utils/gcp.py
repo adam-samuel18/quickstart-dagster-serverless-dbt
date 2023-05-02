@@ -1,5 +1,6 @@
 from google.cloud import secretmanager
 
+
 class GCPSecretAuth:
     def __init__(self, secret_id, project_id):
         self.project_id = project_id
@@ -10,10 +11,12 @@ class GCPSecretAuth:
         client = secretmanager.SecretManagerServiceClient()
 
         # Build the resource name of the secret version.
-        name = f"projects/{self.project_id}/secrets/{self.secret_id}/versions/{version_id}"
+        name = (
+            f"projects/{self.project_id}/secrets/{self.secret_id}/versions/{version_id}"
+        )
 
         # Access the secret version.
         response = client.access_secret_version(name=name)
 
         # Return the decoded payload.
-        return response.payload.data.decode('UTF-8')
+        return response.payload.data.decode("UTF-8")

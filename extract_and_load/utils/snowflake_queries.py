@@ -6,14 +6,13 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 import snowflake.connector as sf
 from snowflake_aws import SnowflakeLoadAuth
 
+
 class SnowflakeGetDates:
-    def __init__(
-        self, config: dict, env: str
-    ):
+    def __init__(self, config: dict, env: str):
         self.datetime_column = config["DATETIME_COLUMN"]
         self.schema = config["SCHEMA"]
         self.table = config["TABLE"]
-        
+
         snowflake_load_auth = SnowflakeLoadAuth(config, env)
         self.conn, self.database = snowflake_load_auth.establish_connection(self.schema)
 

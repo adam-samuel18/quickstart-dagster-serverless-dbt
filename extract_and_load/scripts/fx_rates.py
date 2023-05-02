@@ -20,9 +20,11 @@ import argparse
 import pandas as pd
 from forex_python.converter import CurrencyRates
 from extract_and_load.utils.get_dates import GetDates
-#from extract_and_load.utils.snowflake_aws import SnowflakeExport
-#from extract_and_load.utils.duckdb import DuckDBExport
+
+# from extract_and_load.utils.snowflake_aws import SnowflakeExport
+# from extract_and_load.utils.duckdb import DuckDBExport
 from extract_and_load.utils.bigquery import BigQueryExport
+
 
 def get_report(daterange, base_currency) -> pd.DataFrame:
     """
@@ -35,11 +37,10 @@ def get_report(daterange, base_currency) -> pd.DataFrame:
     for date in daterange:
         try:
             daily_fx_rates = CurrencyRates().get_rates(
-                base_currency,
-                datetime.datetime(date.year, date.month, date.day)
+                base_currency, datetime.datetime(date.year, date.month, date.day)
             )
             json_date = datetime.date(date.year, date.month, date.day)
-            row = {'DATE': json_date, 'RAW_JSON': daily_fx_rates}
+            row = {"DATE": json_date, "RAW_JSON": daily_fx_rates}
             print(f"Retrieved foreign exchanges rates for: {date}")
             all_rows.append(row)
         except:
@@ -47,7 +48,7 @@ def get_report(daterange, base_currency) -> pd.DataFrame:
 
     if len(all_rows) > 0:
         all_rows_df = pd.DataFrame(all_rows)
-        all_rows_df['RAW_JSON'] = all_rows_df['RAW_JSON'].apply(json.dumps)
+        all_rows_df["RAW_JSON"] = all_rows_df["RAW_JSON"].apply(json.dumps)
         return all_rows_df
 
 
@@ -70,11 +71,11 @@ if __name__ == "__main__":
 
     get_dates = GetDates(config, env)
     daterange = get_dates.daterange()
-    get_report(daterange, config['BASE_CURRENCY'])
-    
-    #report = get_report(daterange, config['BASE_CURRENCY'])
+    get_report(daterange, config["BASE_CURRENCY"])
 
-    #if report != None:
+    # report = get_report(daterange, config['BASE_CURRENCY'])
+
+    # if report != None:
     #    #snowflake_export = SnowflakeExport(config, env)
     #    #snowflake_export.copy_df_into_sf_table(report)
 
@@ -83,6 +84,5 @@ if __name__ == "__main__":
 
     #    bigquery_export = BigQueryExport(config, env, job_config=None)
     #    bigquery_export.copy_df_into_bq_table(report)
-    #else:
+    # else:
     #    print('No results were found')
-   
