@@ -3,3 +3,4 @@ dbt/logs*
 dbt/dbt_packages*
 dbt/target*
 **/tmp*
+.DS_STORE**

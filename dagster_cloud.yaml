@@ -1,0 +1,25 @@
+locations:
+  - location_name: data-eng-pipeline
+    image:  dagster_scripts:latest
+    code_source:
+      package_name: dagster_scripts
+  #   container_context:
+  #     ecs:
+  #       env_vars:
+  #         - DATABASE_NAME=staging
+  #         - DATABASE_PASSWORD
+  #       secrets:
+  #         - name: "MY_API_TOKEN"
+  #           valueFrom: "arn:aws:secretsmanager:us-east-1:123456789012:secret:FOO-AbCdEf:token::"
+  #         - name: "MY_PASSWORD"
+  #           valueFrom: "arn:aws:secretsmanager:us-east-1:123456789012:secret:FOO-AbCdEf:password::"
+  #       secrets_tags:
+  #         - "dagster"
+  #       server_resources: # Resources for code servers launched by the agent for this location
+  #         cpu: 256
+  #         memory: 512
+  #       run_resources: # Resources for runs launched by the agent for this location
+  #         cpu: 4096
+  #         memory: 16384
+  #       execution_role_arn: 
+  #       task_role_arn: 
