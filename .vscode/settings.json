@@ -1,28 +1,30 @@
 {
-    "[python]": {
-        "editor.defaultFormatter": "ms-python.black-formatter"
-    },
-    "python.formatting.provider": "none",
-    "sqlfluff.config": "$adams/.sqlfluff",
-    "sqlfluff.dialect": "bigquery",
-    "sqlfluff.executablePath": "sqlfluff",
-    "sqlfluff.ignoreLocalConfig": false,
-    "sqlfluff.ignoreParsing": false,
-    "sqlfluff.rules": [],
-    "sqlfluff.suppressNotifications": false,
-    "sqlfluff.workingDirectory": "",
-    /* Linter */
-    "sqlfluff.linter.arguments": [],
-    "sqlfluff.linter.run": "onType",
-    "sqlfluff.linter.diagnosticSeverity": "error",
-    "sqlfluff.linter.diagnosticSeverityByRule": [
-      {
-        "rule": "L010",
-        "severity": "warning"
-      }
-    ],
-    "sqlfluff.linter.lintEntireProject": true,
-    /* Formatter */
-    "sqlfluff.format.arguments": ["--FIX-EVEN-UNPARSABLE"],
-    "sqlfluff.format.enabled": true,
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
+  "python.formatting.provider": "none",
+  // change this to where your python dbt virtual environment python binary is located
+  //"python.python.defaultInterpreterPath": "./.dbtenv/bin/python",
+  "files.associations": {
+    // associate all sql files in the folder with jinja sql
+    "*.sql": "jinja-sql",
+    // optional: don't format models in `target/` dir.
+    // This disables syntax highlighting in the target folder
+    // This helps to very quickly identify, that you are not in a model file, 
+    // but a compiled target file.
+    "**/target/**": ""
+  },
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  // run "whereis sqlfluff" to find the executable path of your sqlfluff installation
+  "sqlfluff.executablePath": "/Users/adams/anaconda3/bin/sqlfluff",
+  "sqlfluff.dialect": "bigquery",
+  "sqlfluff.linter.run": "onSave",
+  "sqlfluff.experimental.format.executeInTerminal": true,
+  "editor.formatOnSave": false,
+  "dbt.queryLimit": 1000,
+  "editor.rulers": [
+    100
+  ]
 }

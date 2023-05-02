@@ -1,0 +1,29 @@
+[sqlfluff]
+# Choose the sql dialect to use
+dialect = bigquery
+# Use jinja templater instead of dbt, as the dbt templater is slow
+# and does not work with bigquery dialect
+templater = jinja
+# Optional: Exclude some rules
+# Find all rules here: https://docs.sqlfluff.com/en/stable/rules.html
+exclude_rules = L034, L032, L024, L015, L008, L001
+ignore_templated_areas = True
+large_file_skip_byte_limit = 200000
+
+[sqlfluff:templater:jinja]
+# Make dbt default macros available like `ref`
+apply_dbt_builtins = true
+# Load custom macros from the macro directory
+load_macros_from_path = ./macros/
+# Allow mocking dbt_utils and other packages through
+# python files placed in this dir
+library_path = ./sqlfluff_libs/
+
+# Mock variables that are used in dbt
+[sqlfluff:templater:jinja:context]
+target = prod
+
+max_line_length = 100
+
+[sqlfluff:indentation]
+tab_space_size = 4
