@@ -1,6 +1,6 @@
 locations:
   - location_name: data-eng-pipeline
-    image:  dagster_scripts:latest
+    # image:  dagster_scripts:latest
     code_source:
       package_name: dagster_scripts
   #   container_context:
