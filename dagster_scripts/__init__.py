@@ -3,6 +3,7 @@ from dagster import (
     load_assets_from_package_module
 )
 from dagster_dbt import dbt_cli_resource, load_assets_from_dbt_project
+from dagster_scripts.jobs import schedules 
 from dagster_scripts.assets.raw_assets import forex
 from dagster_scripts.utils.constants import DBT_PROJECT_DIR, DBT_PROFILES_DIR, DBT_CONFIG
 
@@ -26,5 +27,6 @@ resources = {
 defs = Definitions(
     assets=[*raw_forex_assets, 
             *dbt_assets],
-    resources=resources,
+    resources = resources,
+    schedules = schedules
 )
