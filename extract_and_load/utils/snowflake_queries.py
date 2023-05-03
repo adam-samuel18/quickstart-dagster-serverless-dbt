@@ -1,10 +1,9 @@
 import os
 import sys
-
-sys.path.append(os.path.dirname(os.path.realpath(__file__)))
-
 import snowflake.connector as sf
 from snowflake_aws import SnowflakeLoadAuth
+
+sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
 
 class SnowflakeGetDates:
@@ -23,8 +22,10 @@ class SnowflakeGetDates:
         Gets the maximum date in the table in the database
         """
         cur = self.conn.cursor()
-        stmt = (f"select max({self.datetime_column}) "
-        f"from {self.database}.{self.schema}.{self.table};")
+        stmt = (
+            f"select max({self.datetime_column}) "
+            f"from {self.database}.{self.schema}.{self.table};"
+        )
         try:
             max_date_in_table = cur.execute(stmt).fetchone()
         except sf.errors.ProgrammingError as e:

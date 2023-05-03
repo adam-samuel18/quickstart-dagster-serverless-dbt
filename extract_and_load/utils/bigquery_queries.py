@@ -1,10 +1,9 @@
 import os
 import sys
+from bigquery import BigQueryLoadAuth
+from datetime import datetime
 
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
-
-from bigquery import BigQueryLoadAuth
-from datetime import date, datetime
 
 
 class BigQueryGetDates:
@@ -21,8 +20,10 @@ class BigQueryGetDates:
         Gets the maximum date in the table in the database
         """
 
-        stmt = (f"select max({self.datetime_column}) from "
-        f"{self.database}.{self.schema}.{self.table};")
+        stmt = (
+            f"select max({self.datetime_column}) from "
+            f"{self.database}.{self.schema}.{self.table};"
+        )
         try:
             max_date_in_table_query = self.client.query(stmt)
             max_date_in_table = max_date_in_table_query.result()

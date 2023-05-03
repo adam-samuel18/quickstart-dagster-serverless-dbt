@@ -1,9 +1,8 @@
 import os
 import sys
+from google.cloud import bigquery
 
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
-
-from google.cloud import bigquery
 
 
 class BigQueryLoadAuth:
