@@ -6,10 +6,10 @@
   ]
   },
   "python.formatting.provider": "black",
-  "python.formatting.blackArgs": ["--line-length", "79"],
+  "python.formatting.blackArgs": ["--line-length", "88"],
   "python.linting.enabled": true,
   "python.linting.flake8Args": [
-    "--max-line-length=79",
+    "--max-line-length=88",
     "--ignore=W391"
   ],
   // SQLFluff
