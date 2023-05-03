@@ -29,9 +29,7 @@ class AWSSecretAuth:
                 # Deal with the exception here, and/or rethrow at your
                 # discretion.
                 raise e
-            elif (
-                e.response["Error"]["Code"] == "InternalServiceErrorException"
-            ):
+            elif e.response["Error"]["Code"] == "InternalServiceErrorException":
                 # An error occurred on the server side.
                 # Deal with the exception here, and/or rethrow at your
                 # discretion.
@@ -68,9 +66,7 @@ class AWSSecretAuth:
 
 
 class S3Export:
-    def write_to_s3(
-        aws_key: str, aws_secret: str, env: str, config: dict, data
-    ):
+    def write_to_s3(aws_key: str, aws_secret: str, env: str, config: dict, data):
         """
         Writes data to AWS S3 bucket
         """

@@ -23,9 +23,7 @@ from extract_and_load.utils.get_dates import GetDates
 
 
 sys.path.append(
-    os.path.dirname(
-        os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-    )
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 )
 
 
@@ -60,12 +58,8 @@ def get_report(daterange, base_currency: str) -> pd.DataFrame:
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Foreign Exchange Rates Pipeline"
-    )
-    parser.add_argument(
-        "-c", "--config", required=True, help="a config json file"
-    )
+    parser = argparse.ArgumentParser(description="Foreign Exchange Rates Pipeline")
+    parser.add_argument("-c", "--config", required=True, help="a config json file")
     parser.add_argument(
         "-env",
         "--env",

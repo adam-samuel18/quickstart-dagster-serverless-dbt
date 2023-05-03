@@ -32,9 +32,7 @@ class BigQueryExport:
             self.project_name,
             self.client,
         ) = bigquery_load_auth.establish_connection()
-        self.table_id = (
-            f"{self.project_name}.{config['SCHEMA']}.{config['TABLE']}"
-        )
+        self.table_id = f"{self.project_name}.{config['SCHEMA']}.{config['TABLE']}"
         self.job_config = job_config
 
     def copy_df_into_bq_table(self, df):

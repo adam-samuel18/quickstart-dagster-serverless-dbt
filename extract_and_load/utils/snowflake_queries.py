@@ -13,9 +13,7 @@ class SnowflakeGetDates:
         self.table = config["TABLE"]
 
         snowflake_load_auth = SnowflakeLoadAuth(config, env)
-        self.conn, self.database = snowflake_load_auth.establish_connection(
-            self.schema
-        )
+        self.conn, self.database = snowflake_load_auth.establish_connection(self.schema)
 
     def get_max_date_from_table(self) -> datetime:
         """

@@ -26,7 +26,7 @@ resources = {
 }
 
 defs = Definitions(
-    assets=[*raw_forex_assets, *dbt_assets], 
-    resources=resources, 
-    schedules=schedules
+    assets=[*raw_forex_assets, *dbt_assets],
+    resources=resources,
+    schedules=schedules,
 )
