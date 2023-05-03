@@ -6,5 +6,3 @@ RUN mkdir -p $DAGSTER_HOME
 WORKDIR $DAGSTER_HOME
 COPY . .
 RUN pip install -r requirements.txt
-EXPOSE 3000
-ENTRYPOINT ["dagit", "-h", "0.0.0.0", "-p", "3000"]
