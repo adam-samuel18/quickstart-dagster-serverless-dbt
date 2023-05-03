@@ -1,17 +1,18 @@
 {
   "[python]": {
-    "editor.defaultFormatter": "ms-python.black-formatter"
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.rulers": [
+      79
+  ]
   },
-  "python.formatting.provider": "none",
-  // change this to where your python dbt virtual environment python binary is located
-  //"python.python.defaultInterpreterPath": "./.dbtenv/bin/python",
+  "python.formatting.provider": "black",
+  "python.formatting.blackArgs": ["--line-length", "79"],
+  "python.linting.enabled": true,
+  "python.linting.flake8Args": ["--max-line-length=79"],
+  // SQLFluff
   "files.associations": {
-    // associate all sql files in the folder with jinja sql
     "*.sql": "jinja-sql",
     // optional: don't format models in `target/` dir.
-    // This disables syntax highlighting in the target folder
-    // This helps to very quickly identify, that you are not in a model file, 
-    // but a compiled target file.
     "**/target/**": ""
   },
   "editor.quickSuggestions": {

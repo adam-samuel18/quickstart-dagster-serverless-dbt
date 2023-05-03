@@ -14,14 +14,17 @@ class SnowflakeGetDates:
         self.table = config["TABLE"]
 
         snowflake_load_auth = SnowflakeLoadAuth(config, env)
-        self.conn, self.database = snowflake_load_auth.establish_connection(self.schema)
+        self.conn, self.database = snowflake_load_auth.establish_connection(
+            self.schema
+        )
 
     def get_max_date_from_table(self) -> datetime:
         """
         Gets the maximum date in the table in the database
         """
         cur = self.conn.cursor()
-        stmt = f"select max({self.datetime_column}) from {self.database}.{self.schema}.{self.table};"
+        stmt = (f"select max({self.datetime_column}) "
+        f"from {self.database}.{self.schema}.{self.table};")
         try:
             max_date_in_table = cur.execute(stmt).fetchone()
         except sf.errors.ProgrammingError as e:

@@ -29,8 +29,13 @@ class BigQueryLoadAuth:
 class BigQueryExport:
     def __init__(self, config, env, job_config):
         bigquery_load_auth = BigQueryLoadAuth(config, env)
-        self.project_name, self.client = bigquery_load_auth.establish_connection()
-        self.table_id = f"{self.project_name}.{config['SCHEMA']}.{config['TABLE']}"
+        (
+            self.project_name,
+            self.client,
+        ) = bigquery_load_auth.establish_connection()
+        self.table_id = (
+            f"{self.project_name}.{config['SCHEMA']}.{config['TABLE']}"
+        )
         self.job_config = job_config
 
     def copy_df_into_bq_table(self, df):

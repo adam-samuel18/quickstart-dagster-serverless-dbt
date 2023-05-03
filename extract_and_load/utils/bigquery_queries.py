@@ -21,7 +21,8 @@ class BigQueryGetDates:
         Gets the maximum date in the table in the database
         """
 
-        stmt = f"select max({self.datetime_column}) from {self.database}.{self.schema}.{self.table};"
+        stmt = (f"select max({self.datetime_column}) from "
+        f"{self.database}.{self.schema}.{self.table};")
         try:
             max_date_in_table_query = self.client.query(stmt)
             max_date_in_table = max_date_in_table_query.result()

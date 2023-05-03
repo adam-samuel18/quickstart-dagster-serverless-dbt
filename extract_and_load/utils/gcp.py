@@ -12,7 +12,8 @@ class GCPSecretAuth:
 
         # Build the resource name of the secret version.
         name = (
-            f"projects/{self.project_id}/secrets/{self.secret_id}/versions/{version_id}"
+            f"projects/{self.project_id}/secrets/{self.secret_id}/"
+            f"versions/{version_id}"
         )
 
         # Access the secret version.

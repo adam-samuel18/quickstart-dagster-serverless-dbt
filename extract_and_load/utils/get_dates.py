@@ -30,7 +30,8 @@ class GetDates:
 
     def get_dates(self, max_date_in_table=None) -> tuple[datetime, datetime]:
         """
-        Calculates the which dates to query when getting new raw data based on environment and max_date in the table
+        Calculates the which dates to query when getting new raw data based on
+        environment and max_date in the table
         """
 
         # snowflake_dates = SnowflakeGetDates(self.config, self.env)
@@ -67,7 +68,8 @@ class GetDates:
 
     def daterange(self) -> datetime:
         """
-        Yields dates from the user defined daterange. The get_rates() function will work over these date values.
+        Yields dates from the user defined daterange. The get_rates() function
+        will work over these date values.
         :param start_date, end_date: are defined in the json config file
         """
 
