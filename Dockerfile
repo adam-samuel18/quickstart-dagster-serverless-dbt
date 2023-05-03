@@ -8,6 +8,6 @@ RUN pip install --upgrade pip
 
 COPY requirements.txt /opt/dagster/app/requirements.txt
 COPY dagster.yaml dagster_cloud.yaml workspace.yaml /opt/dagster/app/
-RUN ls
+RUN echo $(ls)
 RUN pip install -r requirements.txt
 RUN rm -rf requirements.txt /root/.cache
