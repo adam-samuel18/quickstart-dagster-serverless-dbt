@@ -28,15 +28,15 @@ jobs:
     runs-on: ubuntu-latest
     needs: parse_workspace
     name: Dagster Hybrid Deploy
-    # strategy:
-    #   fail-fast: false
-    #   matrix:
-    #     location: ${{ fromJSON(needs.parse_workspace.outputs.build_info) }}
+    strategy:
+      fail-fast: false
+      matrix:
+        location: ${{ fromJSON(needs.parse_workspace.outputs.build_info) }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        # with:
-        #   ref: ${{ github.head_ref }}
+        with:
+          ref: ${{ github.head_ref }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -49,20 +49,20 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      # - name: Build and deploy to Dagster Cloud hybrid
-      #   uses: dagster-io/dagster-cloud-action/actions/hybrid_prod_deploy@v0.1
-      #   with:
-      #     dagster_cloud_api_token: ${{ secrets.DAGSTER_CLOUD_API_TOKEN }}
-      #     location: ${{ toJson(matrix.location) }}
-      #     organization_id: adamsamuel18
+      # - name: Build, tag, and push docker image to Amazon ECR
       #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+      #     REPOSITORY: dagster-cloud-hybrid
+      #     IMAGE_TAG: ${{ github.sha }}
+      #   run: |
+      #     docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+      #     docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
-      - name: Build, tag, and push docker image to Amazon ECR
+      - name: Build and deploy to Dagster Cloud hybrid
+        uses: dagster-io/dagster-cloud-action/actions/hybrid_prod_deploy@v0.1
+        with:
+          dagster_cloud_api_token: ${{ secrets.DAGSTER_CLOUD_API_TOKEN }}
+          location: ${{ toJson(matrix.location) }}
+          organization_id: ${{ secrets.ORGANIZATION_ID }}
         env:
-          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: dagster-cloud-hybrid
-          IMAGE_TAG: ${{ github.sha }}
-        run: |
-          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
-          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
