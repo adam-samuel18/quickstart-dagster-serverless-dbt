@@ -9,5 +9,6 @@ RUN python3 -m venv ${DAGSTER_HOME}/venv
 
 COPY requirements.txt .
 COPY dagster.yaml dagster_cloud.yaml workspace.yaml ${DAGSTER_HOME}/
-RUN . $DAGSTER_HOME/venv/bin/activate && pip install -r requirements.txt
+RUN . $DAGSTER_HOME/venv/bin/activate
+RUN pip install -r requirements.txt
 RUN rm -rf requirements.txt /root/.cache
