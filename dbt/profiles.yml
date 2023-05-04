@@ -1,0 +1,38 @@
+dbt_dagster_serverless:
+  target: transform_prod
+  outputs:
+    transform_prod:
+      type: bigquery
+      method: service-account
+      project: "{{ env_var('DBT_ENV_SECRET_GSA_TRANSFORM_PROD_PROJECT_ID') }}"
+      dataset: a
+      threads: 1
+      keyfile_json:
+        type: "{{ env_var('DBT_ENV_SECRET_GSA_TRANSFORM_PROD_TYPE') }}"
+        project_id: "{{ env_var('DBT_ENV_SECRET_GSA_TRANSFORM_PROD_PROJECT_ID') }}"
+        private_key_id: "{{ env_var('DBT_ENV_SECRET_GSA_TRANSFORM_PROD_PRIVATE_KEY_ID') }}"
+        private_key: "{{ env_var('DBT_ENV_SECRET_GSA_TRANSFORM_PROD_PRIVATE_KEY') }}"
+        client_email: "{{ env_var('DBT_ENV_SECRET_GSA_TRANSFORM_PROD_CLIENT_EMAIL') }}"
+        client_id: "{{ env_var('DBT_ENV_SECRET_GSA_TRANSFORM_PROD_CLIENT_ID') }}"
+        auth_uri: "{{ env_var('DBT_ENV_SECRET_GSA_TRANSFORM_PROD_AUTH_URI') }}"
+        token_uri: "{{ env_var('DBT_ENV_SECRET_GSA_TRANSFORM_PROD_TOKEN_URI') }}"
+        auth_provider_x509_cert_url: "{{ env_var('DBT_ENV_SECRET_GSA_TRANSFORM_PROD_AUTH_X509_CERT_URL') }}"
+        client_x509_cert_url: "{{ env_var('DBT_ENV_SECRET_GSA_TRANSFORM_PROD_CLIENT_X509_CERT_URL') }}"
+
+    # transform_dev:
+    #   type: bigquery
+    #   method: service-account
+    #   project: "{{ env_var('DBT_ENV_SECRET_TRANSFORM_DEV_PROJECT') }}"
+    #   dataset: a
+    #   threads: 1
+    #   keyfile_json:
+    #     type: "{{ env_var('DBT_ENV_SECRET_GSA_TRANSFORM_DEV_TYPE') }}"
+    #     project_id: "{{ env_var('DBT_ENV_SECRET_GSA_TRANSFORM_DEV_PROJECT_ID') }}"
+    #     private_key_id: "{{ env_var('DBT_ENV_SECRET_GSA_TRANSFORM_DEV_PRIVATE_KEY_ID') }}"
+    #     private_key: "{{ env_var('DBT_ENV_SECRET_GSA_TRANSFORM_DEV_PRIVATE_KEY') }}"
+    #     client_email: "{{ env_var('DBT_ENV_SECRET_GSA_TRANSFORM_DEV_CLIENT_EMAIL') }}"
+    #     client_id: "{{ env_var('DBT_ENV_SECRET_GSA_TRANSFORM_DEV_CLIENT_ID') }}"
+    #     auth_uri: "{{ env_var('DBT_ENV_SECRET_GSA_TRANSFORM_DEV_AUTH_URI') }}"
+    #     token_uri: "{{ env_var('DBT_ENV_SECRET_GSA_TRANSFORM_DEV_TOKEN_URI') }}"
+    #     auth_provider_x509_cert_url: "{{ env_var('DBT_ENV_SECRET_GSA_TRANSFORM_DEV_AUTH_X509_CERT_URL') }}"
+    #     client_x509_cert_url: "{{ env_var('DBT_ENV_SECRET_GSA_TRANSFORM_DEV_CLIENT_X509_CERT_URL') }}"
