@@ -3,7 +3,7 @@ dbt_dagster_serverless:
   outputs:
     transform_prod:
       type: bigquery
-      method: service-account
+      method: service-account-json
       project: "{{ env_var('DBT_ENV_SECRET_GSA_TRANSFORM_PROD_PROJECT_ID') }}"
       dataset: a
       threads: 1

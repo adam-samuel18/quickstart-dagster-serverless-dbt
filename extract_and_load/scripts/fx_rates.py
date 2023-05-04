@@ -16,10 +16,10 @@ import argparse
 import pandas as pd
 from forex_python.converter import CurrencyRates
 from extract_and_load.utils.get_dates import GetDates
-
+from extract_and_load.utils.bigquery import BigQueryExport
 # from extract_and_load.utils.snowflake_aws import SnowflakeExport
 # from extract_and_load.utils.duckdb import DuckDBExport
-# from extract_and_load.utils.bigquery import BigQueryExport
+
 
 
 sys.path.append(
@@ -76,18 +76,16 @@ if __name__ == "__main__":
 
     get_dates = GetDates(config, env)
     daterange = get_dates.daterange()
-    get_report(daterange, config["BASE_CURRENCY"])
+    report = get_report(daterange, config["BASE_CURRENCY"])
 
-    # report = get_report(daterange, config['BASE_CURRENCY'])
-
-    # if report != None:
+    if report != None:
     #    #snowflake_export = SnowflakeExport(config, env)
     #    #snowflake_export.copy_df_into_sf_table(report)
 
     #    #duckdb_export = DuckDBExport()
     #    #duckdb_export.view_df_into_ddb(report)
 
-    #    bigquery_export = BigQueryExport(config, env, job_config=None)
-    #    bigquery_export.copy_df_into_bq_table(report)
-    # else:
-    #    print('No results were found')
+        bigquery_export = BigQueryExport(config, env, job_config=None)
+        bigquery_export.copy_df_into_bq_table(report)
+     else:
+        print('No results were found')
