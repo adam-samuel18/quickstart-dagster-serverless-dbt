@@ -1,6 +1,8 @@
 import os
 import sys
+from extract_and_load.utils.aws import AWSSecretAuth
 from google.cloud import bigquery
+from google.oauth2 import service_account
 
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
@@ -8,31 +10,45 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 class BigQueryLoadAuth:
     def __init__(self, config, env):
         if env == "dev":
-            self.project_name = "raw-dev"
+            self.secret_name = "BIGQUERY_LOAD_DEV"
         elif env == "prod":
-            self.project_name = "raw-prod"
+            self.secret_name = "BIGQUERY_LOAD_PROD"
         else:
             print("You must specify an environment in [dev, prod]")
 
+        bigquery_secret_config = {
+            "REGION_NAME": config["REGION_NAME"],
+            "SECRET_NAME": self.secret_name,
+        }
+
+        secret_auth = AWSSecretAuth(bigquery_secret_config)
+        self.service_account_creds = secret_auth.get_secret()
         self.schema = config["SCHEMA"]
         self.table = config["TABLE"]
         self.warehouse = config["WAREHOUSE"]
 
     def establish_connection(self) -> tuple[str, dict]:
         # Construct a BigQuery client object.
-        self.client = bigquery.Client()
+        credentials = service_account.Credentials.from_service_account_info(
+            self.service_account_creds
+        )
+        self.project_id = credentials.project_id
+        self.client = bigquery.Client(
+            credentials=credentials,
+            project=self.project_id,
+        )
 
-        return self.project_name, self.client
+        return self.project_id, self.client
 
 
 class BigQueryExport:
     def __init__(self, config, env, job_config):
         bigquery_load_auth = BigQueryLoadAuth(config, env)
         (
-            self.project_name,
+            self.project_id,
             self.client,
         ) = bigquery_load_auth.establish_connection()
-        self.table_id = f"{self.project_name}.{config['SCHEMA']}.{config['TABLE']}"
+        self.table_id = f"{self.project_id}.{config['SCHEMA']}.{config['TABLE']}"
         self.job_config = job_config
 
     def copy_df_into_bq_table(self, df):
