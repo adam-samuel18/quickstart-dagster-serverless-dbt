@@ -1,14 +1,9 @@
 from dagster import asset
-import os
-import subprocess
-
-ENVIRONMENT = os.getenv("ENVIRONMENT")
+from dagster_scripts.utils.constants import ENVIRONMENT
+from extract_and_load.scripts.fx_rates import FXRates
 
 
 @asset(compute_kind="python")
 def fx_rates():
-    cmd = (
-        "python3 extract_and_load/scripts/fx_rates.py "
-        f"--config fx_rates.json -env {ENVIRONMENT}"
-    ).split()
-    subprocess.run(cmd)
+    fx_rates = FXRates("fx_rates.json", ENVIRONMENT)
+    fx_rates.main()

@@ -12,80 +12,90 @@ import os
 import sys
 import json
 import datetime
-import argparse
 import pandas as pd
 from forex_python.converter import CurrencyRates
 from extract_and_load.utils.get_dates import GetDates
-from extract_and_load.utils.bigquery import BigQueryExport
+
+# from extract_and_load.utils.bigquery import BigQueryExport
 # from extract_and_load.utils.snowflake_aws import SnowflakeExport
 # from extract_and_load.utils.duckdb import DuckDBExport
-
-
+# import argparse
 
 sys.path.append(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 )
 
 
-def get_report(daterange, base_currency: str) -> pd.DataFrame:
-    """
-    Return foreign exchange rates for more than 25 currencies. Start and end
-    date can be configured in the json config file. The entries come back per
-    day, but there might be gaps. The date and exchange rates create a row,
-    which are added to a list, this is the end result.
-    """
+class FXRates:
+    def __init__(self, config_filename: str, env: str):
+        self.config_filename = config_filename
+        self.env = env
 
-    all_rows = []
+    def get_report(self, daterange, base_currency: str) -> pd.DataFrame:
+        """
+        Return foreign exchange rates for more than 25 currencies. Start and end
+        date can be configured in the json config file. The entries come back per
+        day, but there might be gaps. The date and exchange rates create a row,
+        which are added to a list, this is the end result.
+        """
 
-    for date in daterange:
-        try:
-            daily_fx_rates = CurrencyRates().get_rates(
-                base_currency,
-                datetime.datetime(date.year, date.month, date.day),
-            )
-            json_date = datetime.date(date.year, date.month, date.day)
-            row = {"DATE": json_date, "RAW_JSON": daily_fx_rates}
-            print(f"Retrieved foreign exchanges rates for: {date}")
-            all_rows.append(row)
-        except:
-            print("There is no new data to collect")
-            pass
+        all_rows = []
 
-    if len(all_rows) > 0:
-        all_rows_df = pd.DataFrame(all_rows)
-        all_rows_df["RAW_JSON"] = all_rows_df["RAW_JSON"].apply(json.dumps)
-        return all_rows_df
+        for date in daterange:
+            try:
+                daily_fx_rates = CurrencyRates().get_rates(
+                    base_currency,
+                    datetime.datetime(date.year, date.month, date.day),
+                )
+                json_date = datetime.date(date.year, date.month, date.day)
+                row = {"DATE": json_date, "RAW_JSON": daily_fx_rates}
+                print(f"Retrieved foreign exchanges rates for: {date}")
+                all_rows.append(row)
+            except:
+                print("There is no new data to collect")
+                pass
 
+        if len(all_rows) > 0:
+            all_rows_df = pd.DataFrame(all_rows)
+            all_rows_df["RAW_JSON"] = all_rows_df["RAW_JSON"].apply(json.dumps)
+            return all_rows_df
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Foreign Exchange Rates Pipeline")
-    parser.add_argument("-c", "--config", required=True, help="a config json file")
-    parser.add_argument(
-        "-env",
-        "--env",
-        required=True,
-        nargs="?",
-        type=str,
-        choices=["dev", "prod"],
-        help="Define environment",
-    )
-    args = parser.parse_args()
+    def main(self):
+        config = json.load(open("extract_and_load/configs/" + self.config_filename))
+        get_dates = GetDates(config, self.env)
+        daterange = get_dates.daterange()
+        report = self.get_report(daterange, config["BASE_CURRENCY"])
+        return report
 
-    config = json.load(open("extract_and_load/configs/" + args.config))
-    env = args.env
+    # if __name__ == "__main__":
+    #     parser = argparse.ArgumentParser(description="Foreign Exchange Rates Pipeline")
+    #     parser.add_argument("-c", "--config", required=True, help="a config json file")
+    #     parser.add_argument(
+    #         "-env",
+    #         "--env",
+    #         required=True,
+    #         nargs="?",
+    #         type=str,
+    #         choices=["dev", "prod"],
+    #         help="Define environment",
+    #     )
+    #     args = parser.parse_args()
 
-    get_dates = GetDates(config, env)
-    daterange = get_dates.daterange()
-    report = get_report(daterange, config["BASE_CURRENCY"])
+    #     config = json.load(open("extract_and_load/configs/" + args.config))
+    #     env = args.env
 
-    if report != None:
-    #    #snowflake_export = SnowflakeExport(config, env)
-    #    #snowflake_export.copy_df_into_sf_table(report)
+    #     get_dates = GetDates(config, env)
+    #     daterange = get_dates.daterange()
+    #     report = get_report(daterange, config["BASE_CURRENCY"])
 
-    #    #duckdb_export = DuckDBExport()
-    #    #duckdb_export.view_df_into_ddb(report)
+    #     if report != None:
+    #     #    #snowflake_export = SnowflakeExport(config, env)
+    #     #    #snowflake_export.copy_df_into_sf_table(report)
 
-        bigquery_export = BigQueryExport(config, env, job_config=None)
-        bigquery_export.copy_df_into_bq_table(report)
-     else:
-        print('No results were found')
+    #     #    #duckdb_export = DuckDBExport()
+    #     #    #duckdb_export.view_df_into_ddb(report)
+
+    #         bigquery_export = BigQueryExport(config, env, job_config=None)
+    #         bigquery_export.copy_df_into_bq_table(report)
+    #      else:
+    #         print('No results were found')
