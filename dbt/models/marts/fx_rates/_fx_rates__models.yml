@@ -1,0 +1,35 @@
+version: 2
+
+models:
+  - name: f_fx_rates
+    description: "A table of usd and eur exchange rates."
+    meta:
+      label: "Exchange Rates"
+    config:
+      tags: ['lightdash']
+    columns:
+      - name: date
+        tests: 
+          - unique
+          - not_null
+        meta:
+          dimension:
+            label: "Date"
+      - name: usd
+        meta:
+          dimension:
+            hidden: true
+          metrics:
+            avg_usd_fx:
+              label: "Avg USD FX"
+              type: average
+              round: 4
+      - name: eur
+        meta:
+          dimension:
+            hidden: true
+          metrics:
+            avg_eur_fx:
+              label: "Avg EUR FX"
+              type: average
+              round: 4

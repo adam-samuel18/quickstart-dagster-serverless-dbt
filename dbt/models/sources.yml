@@ -6,6 +6,11 @@ sources:
     schema: forex
     tables:
       - name: fx_rates
+        tests:
+            - dbt_utils.recency:
+                datepart: day
+                field: date
+                interval: 1.5
 #         filter: |
 #            {% if target.name == 'dev' %}
 #               where event_time > current_timestamp - interval '3 days'

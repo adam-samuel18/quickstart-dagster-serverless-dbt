@@ -15,11 +15,12 @@ import datetime
 import pandas as pd
 from forex_python.converter import CurrencyRates
 from extract_and_load.utils.get_dates import GetDates
+import argparse
 
 # from extract_and_load.utils.bigquery import BigQueryExport
 # from extract_and_load.utils.snowflake_aws import SnowflakeExport
 # from extract_and_load.utils.duckdb import DuckDBExport
-# import argparse
+
 
 sys.path.append(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
@@ -60,33 +61,30 @@ class FXRates:
             all_rows_df["RAW_JSON"] = all_rows_df["RAW_JSON"].apply(json.dumps)
             return all_rows_df
 
-    def main(self):
+    def main(self) -> pd.DataFrame:
         config = json.load(open("extract_and_load/configs/" + self.config_filename))
         get_dates = GetDates(config, self.env)
         daterange = get_dates.daterange()
         report = self.get_report(daterange, config["BASE_CURRENCY"])
         return report
 
-    # if __name__ == "__main__":
-    #     parser = argparse.ArgumentParser(description="Foreign Exchange Rates Pipeline")
-    #     parser.add_argument("-c", "--config", required=True, help="a config json file")
-    #     parser.add_argument(
-    #         "-env",
-    #         "--env",
-    #         required=True,
-    #         nargs="?",
-    #         type=str,
-    #         choices=["dev", "prod"],
-    #         help="Define environment",
-    #     )
-    #     args = parser.parse_args()
 
-    #     config = json.load(open("extract_and_load/configs/" + args.config))
-    #     env = args.env
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Foreign Exchange Rates Pipeline")
+    parser.add_argument("-c", "--config", required=True, help="a config json file")
+    parser.add_argument(
+        "-env",
+        "--env",
+        required=True,
+        nargs="?",
+        type=str,
+        choices=["dev", "prod"],
+        help="Define environment",
+    )
+    args = parser.parse_args()
 
-    #     get_dates = GetDates(config, env)
-    #     daterange = get_dates.daterange()
-    #     report = get_report(daterange, config["BASE_CURRENCY"])
+    fx_rates = FXRates(args.config, args.env)
+    fx_rates.main()
 
     #     if report != None:
     #     #    #snowflake_export = SnowflakeExport(config, env)
